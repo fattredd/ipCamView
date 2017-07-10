@@ -73,10 +73,6 @@ class Player(Tk.Frame):
         Tk.Frame.__init__(self, parent)
 
         self.parent = parent
-
-        if title == None:
-            title = "tk_vlc"
-        self.parent.title(title)
         '''
         # Menu Bar
         #   File Menu
@@ -108,7 +104,6 @@ class Player(Tk.Frame):
                 from_=0, to=100, orient=Tk.HORIZONTAL, length=100)
         self.volslider.pack(side=Tk.LEFT)
         ctrlpanel.pack(side=Tk.BOTTOM)
-
         ctrlpanel2 = ttk.Frame(self.parent)
         self.scale_var = Tk.DoubleVar()
         self.timeslider_last_val = ""
@@ -117,6 +112,10 @@ class Player(Tk.Frame):
         self.timeslider.pack(side=Tk.BOTTOM, fill=Tk.X,expand=1)
         self.timeslider_last_update = time.time()
         ctrlpanel2.pack(side=Tk.BOTTOM,fill=Tk.X)
+        
+        
+        ctrlpanel.pack_forget()
+        ctrlpanel2.pack_forget()
         #'''
 
         # VLC player controls
@@ -285,13 +284,25 @@ def _quit():
 if __name__ == "__main__":
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
-    player1 = Player(root)
-    player1.OnOpen('192.168.1.133')
-    '''
-    player1 = Player(root)
-    player1.OnOpen('192.168.1.133')
     
-    player1 = Player(root)
-    player1.OnOpen('192.168.1.133')'''
+    AllPanels = ttk.Frame(root)
+    LeftPanels = ttk.Frame(AllPanels)
+    RightPanels = ttk.Frame(AllPanels)
+    
+    player1 = Player(LeftPanels)
+    player1.OnOpen('192.168.1.133',True)
+    
+    player2 = Player(LeftPanels)
+    player2.OnOpen('192.168.1.131',True)
+    
+    player3 = Player(RightPanels)
+    player3.OnOpen('192.168.1.134',True)
+    
+    player4 = Player(RightPanels)
+    player4.OnOpen('192.168.1.134',True)#'''
+    
+    LeftPanels.pack(fill=X)
+    RightPanels.pack(fill=X)
+    AllPanels.pack(side=Tk.LEFT)
     root.attributes("-fullscreen", True)
     root.mainloop()

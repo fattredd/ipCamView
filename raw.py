@@ -306,7 +306,7 @@ if __name__ == "__main__":
     # Create a Tk.App(), which handles the windowing system event loop
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
-
+    
     player = Player(root, title="tkinter vlc")
     # show the player window centred and run the application
     root.mainloop()
