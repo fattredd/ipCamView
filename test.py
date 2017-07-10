@@ -77,7 +77,7 @@ class Player(Tk.Frame):
         if title == None:
             title = "tk_vlc"
         self.parent.title(title)
-
+        '''
         # Menu Bar
         #   File Menu
         menubar = Tk.Menu(self.parent)
@@ -86,7 +86,7 @@ class Player(Tk.Frame):
         fileMenu = Tk.Menu(menubar)
         fileMenu.add_command(label="Open", underline=0, command=self.OnOpen)
         fileMenu.add_command(label="Exit", underline=1, command=_quit)
-        menubar.add_cascade(label="File", menu=fileMenu)
+        menubar.add_cascade(label="File", menu=fileMenu)#'''
 
         # The second panel holds controls
         self.player = None
@@ -117,7 +117,7 @@ class Player(Tk.Frame):
         self.timeslider.pack(side=Tk.BOTTOM, fill=Tk.X,expand=1)
         self.timeslider_last_update = time.time()
         ctrlpanel2.pack(side=Tk.BOTTOM,fill=Tk.X)
-
+        #'''
 
         # VLC player controls
         self.Instance = vlc.Instance()
@@ -141,14 +141,20 @@ class Player(Tk.Frame):
         """
         self.Close()
 
-    def OnOpen(self, ip):
+    def OnOpen(self, ip, override=False):
         """Select a streaming ip
         """
         self.OnStop()
         # Creation
-        #self.Media = self.Instance.media_new("rtsp://%1:554/profile2".format(ip))
-        self.Media = self.Instance.media_new("C:\\Users\\butlerj2\\Downloads\\Prim.mp4")
+        link = "rtsp://%s:554/profile2".format(ip)
+        if override:
+            link = "Prim.mp4"
+        self.Media = self.Instance.media_new(link)
         self.player.set_media(self.Media)
+        if platform.system() == 'Windows':
+                self.player.set_hwnd(self.GetHandle())
+        else:
+            self.player.set_xwindow(self.GetHandle()) # this line messes up windows
         self.OnPlay()
         
     def OnPlay(self):
@@ -189,18 +195,18 @@ class Player(Tk.Frame):
         # re-set the timeslider to the correct range.
         length = self.player.get_length()
         dbl = length * 0.001
-        self.timeslider.config(to=dbl)
+        #self.timeslider.config(to=dbl)
 
         # update the time on the slider
         tyme = self.player.get_time()
         if tyme == -1:
             tyme = 0
         dbl = tyme * 0.001
-        self.timeslider_last_val = ("%.0f" % dbl) + ".0"
+        #self.timeslider_last_val = ("%.0f" % dbl) + ".0"
         # don't want to programatically change slider while user is messing with it.
         # wait 2 seconds after user lets go of slider
-        if time.time() > (self.timeslider_last_update + 2.0):
-            self.timeslider.set(dbl)
+        #if time.time() > (self.timeslider_last_update + 2.0):
+            #self.timeslider.set(dbl)
 
     def scale_sel(self, evt):
         if self.player == None:
@@ -277,12 +283,15 @@ def _quit():
     os._exit(1)
 
 if __name__ == "__main__":
-    # Create a Tk.App(), which handles the windowing system event loop
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
-
-    player = Player(root, title="tkinter vlc")
-    # show the player window centred and run the application
-    #player.OnOpen('192.168.1.133')
-    #root.attributes("-fullscreen", True)
+    player1 = Player(root)
+    player1.OnOpen('192.168.1.133')
+    '''
+    player1 = Player(root)
+    player1.OnOpen('192.168.1.133')
+    
+    player1 = Player(root)
+    player1.OnOpen('192.168.1.133')'''
+    root.attributes("-fullscreen", True)
     root.mainloop()
