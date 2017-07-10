@@ -73,6 +73,8 @@ class Player(Tk.Frame):
         Tk.Frame.__init__(self, parent)
 
         self.parent = parent
+
+
         '''
         # Menu Bar
         #   File Menu
@@ -284,25 +286,18 @@ def _quit():
 if __name__ == "__main__":
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
-    
-    AllPanels = ttk.Frame(root)
-    LeftPanels = ttk.Frame(AllPanels)
-    RightPanels = ttk.Frame(AllPanels)
-    
-    player1 = Player(LeftPanels)
+    holder = ttk.Frame(root)
+    player1 = Player(holder).grid(row=0,column=0)
     player1.OnOpen('192.168.1.133',True)
     
-    player2 = Player(LeftPanels)
+    player2 = Player(holder).grid(row=0,column=1)
     player2.OnOpen('192.168.1.131',True)
-    
-    player3 = Player(RightPanels)
+
+    player3 = Player(holder).grid(row=1,column=0)
     player3.OnOpen('192.168.1.134',True)
     
-    player4 = Player(RightPanels)
+    player4 = Player(holder).grid(row=1,column=0)
     player4.OnOpen('192.168.1.134',True)#'''
     
-    LeftPanels.pack(fill=X)
-    RightPanels.pack(fill=X)
-    AllPanels.pack(side=Tk.LEFT)
     root.attributes("-fullscreen", True)
     root.mainloop()
