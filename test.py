@@ -1,10 +1,6 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-#
-# tkinter example for VLC Python bindings
-# Copyright (C) 2015 the VideoLAN team
-#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -19,10 +15,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 #
-"""A simple example for VLC python bindings using tkinter. Uses python 3.4
+"""
+A 
 
-Author: Patrick Fay
-Date: 23-09-2015
+Author: Jack Butler
+Date: July 20, 2017
 """
 
 # import external libraries
@@ -284,23 +281,24 @@ def _quit():
     os._exit(1)
 
 if __name__ == "__main__":
+    override = True if len(sys.argv)>1 else False
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
     holderL = ttk.Frame(root)
     holderL.pack(side="left", fill="both", expand="true")
     player1 = Player(holderL)
-    player1.OnOpen('192.168.1.133',True)
+    player1.OnOpen('192.168.1.133',override)
     
     player2 = Player(holderL)
-    player2.OnOpen('192.168.1.131',True)
+    player2.OnOpen('192.168.1.131',override)
 
     holderR = ttk.Frame(root)
     holderR.pack(side="right", fill="both", expand="true")
     player3 = Player(holderR)
-    player3.OnOpen('192.168.1.134',True)
+    player3.OnOpen('192.168.1.134',override)
     
     player4 = Player(holderR)
-    player4.OnOpen('192.168.1.134',True)#'''
+    player4.OnOpen('192.168.1.134',override)#'''
     
     root.attributes("-fullscreen", True)
     root.mainloop()
