@@ -144,7 +144,7 @@ class Player(Tk.Frame):
         """
         self.OnStop()
         # Creation
-        link = "rtsp://%s:554/profile2".format(ip)
+        link = "rtsp://admin:123456@{0}:554/profile2".format(ip)
         if override:
             link = "Prim.mp4"
         self.Media = self.Instance.media_new(link)
@@ -284,20 +284,19 @@ if __name__ == "__main__":
     override = True if len(sys.argv)>1 else False
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
+    
     holderL = ttk.Frame(root)
     holderL.pack(side="left", fill="both", expand="true")
-    player1 = Player(holderL)
+    player1 = Player(holderL) # Top Left
     player1.OnOpen('192.168.1.128',override)
-    
-    player2 = Player(holderL)
+    player2 = Player(holderL) # Bottom Left
     player2.OnOpen('192.168.1.131',override)
 
     holderR = ttk.Frame(root)
     holderR.pack(side="right", fill="both", expand="true")
-    player3 = Player(holderR)
+    player3 = Player(holderR) # Top Right
     player3.OnOpen('192.168.1.133',override)
-    
-    player4 = Player(holderR)
+    player4 = Player(holderR) # Bottom Right
     player4.OnOpen('192.168.1.134',override)#'''
     
     root.attributes("-fullscreen", True)
