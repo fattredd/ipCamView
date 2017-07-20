@@ -25,6 +25,7 @@ Date: July 20, 2017
 # import external libraries
 import vlc
 import sys
+frameT = False
 
 if sys.version_info[0] < 3:
     import Tkinter as Tk
@@ -139,15 +140,15 @@ class Player(Tk.Frame):
         """
         self.Close()
 
-    def OnOpen(self, ip, override=False):
+    def OnOpen(self, ip, profile=2, override=False):
         """Select a streaming ip
         """
         self.OnStop()
         # Creation
-        link = "rtsp://admin:123456@{0}:554/profile2".format(ip)
+        self.link = "rtsp://admin:123456@{0}:554/profile{1}".format(ip, profile)
         if override:
-            link = "Prim.mp4"
-        self.Media = self.Instance.media_new(link)
+            self.link = "Prim.mp4"
+        self.Media = self.Instance.media_new(self.link)
         self.player.set_media(self.Media)
         if platform.system() == 'Windows':
                 self.player.set_hwnd(self.GetHandle())
@@ -155,6 +156,10 @@ class Player(Tk.Frame):
             self.player.set_xwindow(self.GetHandle()) # this line messes up windows
         self.OnPlay()
         
+    def OnClick():
+        self.player.stop()
+        
+    
     def OnPlay(self):
         """Toggle the status to Play/Pause.
         If no file is loaded, open the dialog window.
@@ -281,23 +286,70 @@ def _quit():
     os._exit(1)
 
 if __name__ == "__main__":
+    ipList = [
+        '192.168.1.128',
+        '192.168.1.131',
+        '192.168.1.133',
+        '192.168.1.134']
     override = True if len(sys.argv)>1 else False
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
     
-    holderL = ttk.Frame(root)
+    # Setup the Major frames
+    # Major all
+    allFrame = ttk.Frame(root)
+    
+    holderL = ttk.Frame(allFrame)
     holderL.pack(side="left", fill="both", expand="true")
     player1 = Player(holderL) # Top Left
-    player1.OnOpen('192.168.1.128',override)
     player2 = Player(holderL) # Bottom Left
-    player2.OnOpen('192.168.1.131',override)
 
-    holderR = ttk.Frame(root)
+    holderR = ttk.Frame(allFrame)
     holderR.pack(side="right", fill="both", expand="true")
     player3 = Player(holderR) # Top Right
-    player3.OnOpen('192.168.1.133',override)
     player4 = Player(holderR) # Bottom Right
-    player4.OnOpen('192.168.1.134',override)#'''
     
+    # Major single
+    singleFrame = ttk.Frame(root)
+    singlePlayer = Player(singleFrame)
+    
+    def singleView(event):
+        player1.OnStop() # Stop all videos
+        player2.OnStop()
+        player3.OnStop()
+        player4.OnStop()
+        allFrame.pack_forget() # Hide the pack frame
+        
+        # Determine which video was clicked
+        y = event.y
+        x = event.x
+        cam = 0b00
+        if x > root.winfo_screenwidth()/2:
+            cam = 0b10
+        if y > root.winfo_screenheight()/2:
+            cam |= 0b01
+        
+        # Open and show the single video
+        singleFrame.pack(fill=Tk.BOTH,expand=1)
+        singlePlayer.OnOpen(ipList[cam], 1, override)
+        
+    def allView():
+        singleFrame.pack_forget()
+        allFrame.pack(fill=Tk.BOTH,expand=1)
+        player1.OnOpen(ipList[0], 2, override)
+        player2.OnOpen(ipList[1], 2, override)
+        player3.OnOpen(ipList[2], 2, override)
+        player4.OnOpen(ipList[3], 2, override)
+    
+    def toggleView(event):
+        global frameT
+        if frameT:
+            allView()
+        else:
+            singleView(event)
+        frameT = not frameT
+    
+    root.bind("<Button-1>", toggleView)
+    allView()
     root.attributes("-fullscreen", True)
     root.mainloop()
