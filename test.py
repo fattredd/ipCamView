@@ -286,17 +286,20 @@ def _quit():
 if __name__ == "__main__":
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)
-    holder = ttk.Frame(root)
-    player1 = Player(holder).grid(row=0,column=0)
+    holderL = ttk.Frame(root)
+    holderL.pack(side="left", fill="both", expand="true")
+    player1 = Player(holderL)
     player1.OnOpen('192.168.1.133',True)
     
-    player2 = Player(holder).grid(row=0,column=1)
+    player2 = Player(holderL)
     player2.OnOpen('192.168.1.131',True)
 
-    player3 = Player(holder).grid(row=1,column=0)
+    holderR = ttk.Frame(root)
+    holderR.pack(side="right", fill="both", expand="true")
+    player3 = Player(holderR)
     player3.OnOpen('192.168.1.134',True)
     
-    player4 = Player(holder).grid(row=1,column=0)
+    player4 = Player(holderR)
     player4.OnOpen('192.168.1.134',True)#'''
     
     root.attributes("-fullscreen", True)
