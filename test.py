@@ -287,7 +287,7 @@ if __name__ == "__main__":
     holderL = ttk.Frame(root)
     holderL.pack(side="left", fill="both", expand="true")
     player1 = Player(holderL)
-    player1.OnOpen('192.168.1.133',override)
+    player1.OnOpen('192.168.1.128',override)
     
     player2 = Player(holderL)
     player2.OnOpen('192.168.1.131',override)
@@ -295,7 +295,7 @@ if __name__ == "__main__":
     holderR = ttk.Frame(root)
     holderR.pack(side="right", fill="both", expand="true")
     player3 = Player(holderR)
-    player3.OnOpen('192.168.1.134',override)
+    player3.OnOpen('192.168.1.133',override)
     
     player4 = Player(holderR)
     player4.OnOpen('192.168.1.134',override)#'''
