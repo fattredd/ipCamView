@@ -24,7 +24,7 @@ Date: July 20, 2017
 
 # import external libraries
 import vlc
-import sys
+import os, sys, yaml
 frameT = False
 
 if sys.version_info[0] < 3:
@@ -286,11 +286,24 @@ def _quit():
     os._exit(1)
 
 if __name__ == "__main__":
+    if os.path.isfile('config.yaml'):
+        print('Config file found. Loading it.')
+        with open('config.yaml','r') as f:
+            config = yaml.load(f)
+    else:
+        print('No config file found. Creating one.')
+        with open('config.yaml', 'w+') as f:
+            config = {
+                'topLeft': '192.168.1.128',
+                'topRight': '192.168.1.131',
+                'bottomLeft': '192.168.1.133',
+                'bottomRight': '192.168.1.134'}
+            f.write(yaml.dump(config, default_flow_style=False))
     ipList = [
-        '192.168.1.128',
-        '192.168.1.131',
-        '192.168.1.133',
-        '192.168.1.134']
+        config['topLeft'],
+        config['bottomLeft'],
+        config['topRight'],
+        config['bottomRight']]
     override = True if len(sys.argv)>1 else False
     root = Tk_get_root()
     root.protocol("WM_DELETE_WINDOW", _quit)

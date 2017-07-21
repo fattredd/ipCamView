@@ -5,7 +5,8 @@ base = "Win32GUI"
 
 executables = [Executable("main.py", base=base)]
 
-packages = ["vlc", "sys", "ctypes", "os", "functools", "inspect", "tkinter"]
+packages = ["vlc", "sys", "ctypes", "os", "yaml",
+            "functools", "inspect", "tkinter"]
 options = {
     'build_exe': {
         'packages':packages,
