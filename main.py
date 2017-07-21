@@ -16,10 +16,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 #
 """
-A 
+A program to show 4 ip cam streams fullscreen.
+    Zoom in when one is pressed. Return on
+    second press.
 
 Author: Jack Butler
-Date: July 20, 2017
+Date: July 21, 2017
 """
 
 # import external libraries
