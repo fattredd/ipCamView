@@ -321,25 +321,31 @@ if __name__ == "__main__":
         allFrame.pack_forget() # Hide the pack frame
         
         # Determine which video was clicked
-        y = event.y
-        x = event.x
+        y = root.winfo_pointery()
+        x = root.winfo_pointerx()
         cam = 0b00
+        
+        # This is returning x,y of the subframe, not relative to root.
+        print(x, root.winfo_screenwidth())
         if x > root.winfo_screenwidth()/2:
             cam = 0b10
         if y > root.winfo_screenheight()/2:
             cam |= 0b01
         
         # Open and show the single video
+        print("Opening cam", cam,  ipList[cam])
         singleFrame.pack(fill=Tk.BOTH,expand=1)
         singlePlayer.OnOpen(ipList[cam], 1, override)
         
     def allView():
+        singlePlayer.OnStop()
         singleFrame.pack_forget()
         allFrame.pack(fill=Tk.BOTH,expand=1)
-        player1.OnOpen(ipList[0], 2, override)
-        player2.OnOpen(ipList[1], 2, override)
-        player3.OnOpen(ipList[2], 2, override)
-        player4.OnOpen(ipList[3], 2, override)
+        res = 2
+        player1.OnOpen(ipList[0], res, override)
+        player2.OnOpen(ipList[1], res, override)
+        player3.OnOpen(ipList[2], res, override)
+        player4.OnOpen(ipList[3], res, override)
     
     def toggleView(event):
         global frameT
